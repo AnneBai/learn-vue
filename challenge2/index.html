@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>demo2</title>
+	<link rel="stylesheet" type="text/css" href="./style.css">
+	<script src="./vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+  	<div class="text" id="box1">
+  		<ul class="list" >
+  			<li is="item"
+  					v-for="(option, index) of optionsL"
+  					:key="option.id"
+  					:content="option.text"
+  					:index="index"
+            dir="L"
+  				  @clickitem="select"
+  			></li>
+  		</ul>
+  	</div>
+  	<div class="btns">
+	  	<button class="btn" 
+	  					id="to-r"
+	  					@click="toRight"
+	  	>&gt;&gt;</button>
+	  	<button class="btn" 
+	  					id="to-l"
+	  					@click="toLeft"
+	  	>&lt;&lt;</button>	
+  	</div>
+  	<div class="text" id="box2">
+  		<ul class="list" >
+  			<li is="item"
+  					v-for="(option, index) of optionsR"
+  					:key="option.id"
+  					:content="option.text"
+  					:index="index"
+            dir="R"
+  				  @clickitem="select"
+  			></li>
+  		</ul>
+
+  	</div>	
+  	<div class="result-box">
+  		<p>
+        <button class="btn" 
+                id="ok"
+                @click="getResult"
+        >OK</button>
+      </p>
+  		<textarea class="result-text" id="result" cols="100%"></textarea>
+  	</div>
+  </div>
+
+  <script>
+
+    Vue.component('item',{
+      props:['content','index','dir'],
+      template: '<li class="item" @click="handleClick">{{content}}</li>',
+      methods: {
+        handleClick: function() {
+          this.$emit('clickitem', this.dir, this.index);
+        }
+      }
+    });
+
+  	let data = [{"A":"This is Para A"},{"B":"This is Para B"},
+  							{"C":"This is Para C"},{"D":"This is Para D"}];
+
+  	var app = new Vue({
+  		el: '#app',
+  		data: {
+  			optionsL: [{text:"A", id:0},{text:"B", id:1}, 
+  								 {text:"C", id:2},{text:"D", id:3}],
+  			optionsR: [],
+  			selectIndex: {
+          L: '',
+          R: ''
+        },
+  			resultData: data
+  		},
+  		methods: {
+  			select: function(dir, index) {
+  				this.selectIndex[dir] = index;
+          let id, options;
+          if (dir === 'L') {
+            id = 'box1';
+            options = this.optionsL;
+          } else {
+            id = 'box2';
+            options = this.optionsR;
+          }
+          
+  				let lists = document.getElementById(id).getElementsByTagName('li');
+          //选中切换背景
+  				for (let i = 0; i < options.length; i++) {
+  					if (i === index) {
+  						lists[i].classList.add('selected');
+  					} else {
+  						lists[i].classList.remove('selected');
+  					}
+  				}
+  			},
+  			toRight: function() {
+          if (this.selectIndex['L'] === '') return false;
+  				this.optionsR.push(this.optionsL.splice(this.selectIndex['L'],1)[0]);
+          this.selectIndex['L'] = '';
+  			},
+  			toLeft: function() {
+          if (this.selectIndex['R'] === '') return false;
+  				this.optionsL.push(this.optionsR.splice(this.selectIndex['R'],1)[0]);
+          this.selectIndex['R'] = '';
+  			},
+        // OK按钮点击
+  			getResult: function() {
+          let result = document.getElementById('result'),
+              resultText = '',
+              len = this.optionsR.length;
+          for (let i = 0; i < len; i++) {
+            let item = this.optionsR[i];
+            resultText += this.resultData[item.id][item.text] + '\n';
+          }
+          result.value = resultText;
+  			}
+  		}
+  	})
+  </script>
+</body>
+</html>

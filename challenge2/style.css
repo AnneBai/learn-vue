@@ -1,0 +1,47 @@
+#app {
+	margin: 20px auto;
+	width:362px;
+} 
+/*选项框*/
+.text {
+	display:inline-block;
+	padding-top:5px;
+	width:144px;
+	height:90px;
+	border:1px solid #ddd;
+	text-align: center;
+	vertical-align: top;
+}
+/*选项列表*/
+.text .list {
+	list-style-type: none;
+	margin:0;
+	padding:0;
+}
+/*选中item*/
+.selected {
+	background-color: pink;
+}
+/*操作按钮*/
+.btns {
+	display:inline-block;
+	width:60px;
+	line-height: 3;
+	vertical-align: top;
+	text-align: center;
+}
+.btn {
+	border:1px solid #ddd;
+	border-radius: 5px;
+}
+/*结果框*/
+.result-box {
+	width:100%;
+	text-align: center;
+}
+.result-text {
+	width:100%;
+	min-height: 60px;
+	box-sizing: border-box;
+	border-color:#ddd;
+}
